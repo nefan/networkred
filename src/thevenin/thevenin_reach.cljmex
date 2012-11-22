@@ -1,0 +1,70 @@
+;
+; This file is part of networkred.
+;
+; Copyright (C) 2012, Technical University of Denmark
+; https://github.com/nefan/networkred
+;
+; networkred is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; networkred is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with networkred.  If not, see <http://www.gnu.org/licenses/>.
+; 
+
+; cljmex definition file for thevenin_reach
+(use 'cljmex.core)
+
+; init cljmex
+(cljmex-init "thevenin_reach")
+
+; define arguments
+(argument :name 'n
+          :type :int
+          :format :single
+          )
+
+(argument :name 'M
+          :type :int
+          :format :single
+          )
+
+(argument :name 'L
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'n
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'Link
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'M
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'Pone
+          :type :int
+          :format :row-vector
+          :columns 'n
+          )
+
+(output :name 'outReach
+        :type :real
+        :format :matrix
+        :rows 'n+1
+        :columns 'M
+        )
+
+; close cljmex
+(cljmex-end)

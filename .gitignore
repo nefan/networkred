@@ -1,0 +1,6 @@
+# compiled
+*.o
+*.a
+
+# cljmex
+*.cljmex.hpp

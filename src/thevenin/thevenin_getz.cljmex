@@ -1,0 +1,161 @@
+;
+; This file is part of networkred.
+;
+; Copyright (C) 2012, Technical University of Denmark
+; https://github.com/nefan/networkred
+;
+; networkred is free software: you can redistribute it and/or modify
+; it under the terms of the GNU General Public License as published by
+; the Free Software Foundation, either version 3 of the License, or
+; (at your option) any later version.
+;
+; networkred is distributed in the hope that it will be useful,
+; but WITHOUT ANY WARRANTY; without even the implied warranty of
+; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+; GNU General Public License for more details.
+;
+; You should have received a copy of the GNU General Public License
+; along with networkred.  If not, see <http://www.gnu.org/licenses/>.
+; 
+
+; cljmex definition file for thevenin_getz
+(use 'cljmex.core)
+
+; init cljmex
+(cljmex-init "thevenin_getz")
+
+; define arguments
+(argument :name 'n
+          :type :int
+          :format :single
+          )
+
+(argument :name 'M
+          :type :int
+          :format :single
+          )
+
+(argument :name 'L
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'n
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'U
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'n
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'R
+          :type :real
+          :format :sparse
+          :rows 'n
+          :columns 'n
+          :nonempty true
+        )
+
+(argument :name 'Link
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'M
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'LinkT
+          :type :complex
+          :format :sparse
+          :rows 'n
+          :columns 'M
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'D
+          :type :complex
+          :format :sparse
+          :rows 'M
+          :columns 'M
+          :nonempty true
+          :zip true
+        )
+
+(argument :name 'Pone
+          :type :int
+          :format :row-vector
+          :columns 'n
+          )
+
+(argument :name 'Qone
+          :type :int
+          :format :row-vector
+          :columns 'n
+          )
+
+(argument :name 'reachL_double
+          :type :real
+          :format :matrix
+          :rows 'n+1
+          :columns 'M
+          :nonempty true
+        )
+
+(argument :name 'reachU_double
+          :type :real
+          :format :matrix
+          :rows 'n+1
+          :columns 'M
+          :nonempty true
+        )
+
+(argument :name 'diagOnly
+          :type :logical
+          :format :single
+          )
+
+(argument :name 'file
+          :type :string
+          )
+
+(argument :name 'NITER
+          :type :int
+          :format :single
+          )
+
+(output :name 'outS
+        :type :complex
+        :format :matrix
+        :rows 'M
+        :columns 'M
+        :unzip 'S
+        )
+
+(output :name 'outTimp
+        :type :complex
+        :format :row-vector
+        :rows 'M
+        :unzip 'vs
+        )
+
+(output :name 'outTimeSolve
+        :type :real
+        :format :single
+        :copy 'timebacksolve
+        )
+
+(output :name 'outTimeIPs
+        :type :real
+        :format :single
+        :copy 'timeips
+        )
+
+; close cljmex
+(cljmex-end)

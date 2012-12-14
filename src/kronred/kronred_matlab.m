@@ -18,9 +18,9 @@
 % along with networkred.  If not, see <http://www.gnu.org/licenses/>.
 % 
 
-function Mkr = kronred_slow(Manalyze,ops,index,filter,doRemove)
+function Mkr = kronred_matlab(Msymbolic,ops,index,filter,doRemove)
 
-Mkr = Manalyze;
+Mkr = Msymbolic;
 
 i = 1;
 while (i <= size(ops,2))
@@ -31,7 +31,7 @@ while (i <= size(ops,2))
     K = -op(1);
     node = op(2);
     nodev = Mkr(node,node);
-    assert(mod(K,4) == 0); % simd
+%     assert(mod(K,4) == 0); % simd
     i = i + 1;
     for j=1:K
         op = ops(:,i);

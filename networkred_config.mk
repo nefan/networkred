@@ -18,8 +18,8 @@
 # along with networkred.  If not, see <http://www.gnu.org/licenses/>.
 # 
 
-USE_CUDA = true
-USE_AVX_SIMD = true
+# USE_CUDA = true
+# USE_AVX_SIMD = true
 
 # directory for ssparse, klu, umfpack, etc.
 SPARSELIBDIR=$(HOME)/alien
@@ -45,11 +45,15 @@ CFLAGS+=-UNDEBUG
 # compilers and flags
 MATLAB=matlab
 MEX=mex -O # -lmwlapack -lmwblas
-MEXFLAGS=-largeArrayDims # matlab sparse stuff
+MEXFLAGS+=-largeArrayDims # matlab sparse stuff
 
 CC=g++
-CFLAGS=-O3 
-CFLAGS+=-mavx # if avx supported
+CFLAGS+=-std=c++11
+CFLAGS+=-O3
+ifdef USE_AVX_SIMD
+	CFLAGS+=-DUSE_AVX_SIMD
+	CFLAGS+=-mavx # if avx supported
+endif
 # CFLAGS+=-msse4 # if sse4
 CFLAGS+=-fPIC # make it work with matlab
 CFLAGS+=-fopenmp # openmp

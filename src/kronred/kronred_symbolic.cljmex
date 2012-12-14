@@ -18,49 +18,65 @@
 ; along with networkred.  If not, see <http://www.gnu.org/licenses/>.
 ; 
 
-; cljmex definition file for kronred
+; cljmex definition file for kronred_symbolic
 (use 'cljmex.core)
 
 ; init cljmex
-(cljmex-init "kronred")
+(cljmex-init "kronred_symbolic")
 
 (argument :name 'M
           :type :complex
           :format :sparse
           :nonempty true
           :square true
+          :zip true
         )
 
-(argument :name 'ops_in
-          :type :real
-          :format :matrix
-          :rows 4
-          :nonempty true
-        )
-
-(argument :name 'index_in
-          :type :real
-          :format :row-vector
-          :nonempty true
-        )
-
-(argument :name 'NITER
+(argument :name 'Nnvc
           :type :int
           :format :single
         )
 
-(output :name 'Mkr
-        :type :complex
-        :format :sparse
-        :rows 'index_in.cols
-        :columns 'index_in.cols
-        :nz 'M.nz
+(argument :name 'cutDegree
+          :type :int
+          :format :single
         )
 
-(output :name 'outTime
+(argument :name 'Nsweeps
+          :type :int
+          :format :single
+        )
+
+(argument :name 'split
+          :type :logical
+          :format :single
+        )
+
+(argument :name 'updateEntireMatrix
+          :type :logical
+          :format :single
+        )
+
+(output :name 'Msymbolic_out
+        :format :manual
+        )
+
+(output :name 'Nkr_out
         :type :real
         :format :single
-        :copy 'time
+        :copy 'Nkr
+        )
+
+(output :name 'index_out
+        :format :manual
+        )
+
+(output :name 'ops1_out
+        :format :manual
+        )
+
+(output :name 'ops2_out
+        :format :manual
         )
 
 ; close cljmex

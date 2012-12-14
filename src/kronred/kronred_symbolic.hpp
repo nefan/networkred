@@ -19,11 +19,11 @@
  *
  */
 
-// convenient macros
-#define CLJ_CS_TO_CS_CL(cs_s,clj_s) \
-    cs_cl cs_s; \
-    cs_s.m = clj_s.rows; cs_s.n = clj_s.cols; \
-    cs_s.p = clj_s.p; cs_s.i = clj_s.i; \
-    cs_s.x = clj_s.v; \
-    cs_s.nzmax = L.nz; cs_s.nz = -1; \
+#ifndef _KRONRED_SYMBOLIC_H
+#define _KRONRED_SYMBOLIC_H
 
+#include "kronred_common.hpp"
+#include "kronred.hpp"
+#include "kronred_symbolic.cljmex.hpp"
+
+#endif // _KRONRED_SYMBOLIC_H

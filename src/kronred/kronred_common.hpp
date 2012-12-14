@@ -19,36 +19,13 @@
  *
  */
 
-#include "kronred.hpp"
-
+#include "networkred_common.h"
+#include "cljmex.hpp"
+#include <vector>
 
 extern int linear_index( int row, int col, long *Mp, long *Mi);
 
-extern int kronred_analyze (
-    long *Mp,
-    long *Mi,
-    double *Mx,
-    double *Mz,
-    int nz,
-    double *Mmx,
-    double *Mmz,
-    double *ops1,
-    int Nops,
-    int *ops2
-);
-
-// extract from M to Mkr
-extern int kronred_extract
-(
-    double *Mmx,
-    double *Mmz,
-    long *Mp,
-    long *Mi,
-    int Nkr,
-    double *index,
-    double *filter,
-    long *Mkrp,
-    long *Mkri,
-    double *Mkrx,
-    double *Mkrz
-);
+int kronred_extract(const cljmexComplex_sparse_matrix& M, 
+        double *Mx, double *Mz,
+        std::vector<int>& index,
+        const cljmexComplex_sparse_matrix& Mkr);

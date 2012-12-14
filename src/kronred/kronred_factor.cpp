@@ -19,13 +19,14 @@
  *
  */
 
-#include "kronred_factor.h"
+#include "kronred_factor.hpp"
 
 #ifndef USE_AVX_SIMD
 
 #define CS_LONG
 #define CS_COMPLEX
 #include "cs.h"
+#include <complex.h>
 
 void kronred_factor 
 (
@@ -38,19 +39,19 @@ void kronred_factor
     for (int k=0; k<Nops; k++) {
         int K = -ops[4*k+0];
 
-        cs_complex_t nodev = Mx[ops[4*k+1]]+Mz[ops[4*k+1]]*I;
+        std::complex<double> nodev(Mx[ops[4*k+1]],Mz[ops[4*k+1]]);
 
         int i = k+1;
         for (int j=0; j<K; j++, i++) {
 
-            cs_complex_t node = 
-                (Mx[ops[4*i+1]]+Mz[ops[4*i+1]]*I)*
-                (Mx[ops[4*i+2]]+Mz[ops[4*i+2]]*I)/
+            std::complex<double> node = 
+                std::complex<double>(Mx[ops[4*i+1]],Mz[ops[4*i+1]])*
+                std::complex<double>(Mx[ops[4*i+2]],Mz[ops[4*i+2]])/
                 nodev;
 
 
-            Mx[ops[4*i+0]] -= creal(node);
-            Mz[ops[4*i+0]] -= cimag(node);
+            Mx[ops[4*i+0]] -= real(node);
+            Mz[ops[4*i+0]] -= imag(node);
         }
 
         k += K;

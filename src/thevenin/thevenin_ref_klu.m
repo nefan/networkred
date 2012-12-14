@@ -25,12 +25,14 @@ function [v, timetotal, timelu, timekronred, timebacksolve] = thevenin_ref_klu(M
 % M must be ordered non-voltage controlled first
 %
 
+global NITER;
+
 nvc = 1:Nnvc;
 vc = (Nnvc+1):N;
 Mnvc = M(nvc,nvc);
 Mvc = M(vc,vc);
 
-[resklu timelu] = thevenin_klu(Mnvc);
+[resklu timelu] = thevenin_klu(Mnvc,NITER);
 L = resklu.L; U = resklu.U; p = resklu.p; q = resklu.q;
 R = resklu.R; F = resklu.F;
 assert(norm(F,1) == 0);
@@ -40,7 +42,7 @@ reachU = thevenin_reach(int64(Nnvc),int64(Nvc),U',M((Nnvc+1):end,1:Nnvc)',q);
 
 timekronred = 0;
 
-[S vfast  timebacksolve timeips] = thevenin_getz(int64(Nnvc),int64(Nvc),L,U',R,M(1:Nnvc,(Nnvc+1):end),M((Nnvc+1):end,1:Nnvc)',Mvc,p,q,reachL,reachU,true,'');
+[S vfast  timebacksolve timeips] = thevenin_getz(int64(Nnvc),int64(Nvc),L,U',R,M(1:Nnvc,(Nnvc+1):end),M((Nnvc+1):end,1:Nnvc)',Mvc,p,q,reachL,reachU,true,'',NITER);
 timebacksolve = timebacksolve + timeips;
 % norm(S-(Mvc-M((Nnvc+1):end,1:Nnvc)*(Mnvc\M(1:Nnvc,(Nnvc+1):end))),1)
 

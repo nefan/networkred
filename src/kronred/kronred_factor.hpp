@@ -24,16 +24,10 @@
 #define COMPLEX
 #include "klu_version.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-extern void kronred_factor 
+void kronred_factor 
 (
     double Mx[], 
     double Mz[], 
     int ops[], 
     int Nops
 );
-#ifdef __cplusplus
-}
-#endif // __cplusplus

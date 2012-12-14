@@ -18,7 +18,7 @@
 % along with networkred.  If not, see <http://www.gnu.org/licenses/>.
 % 
 
-function [Manalyze, Nnvckr, index, ops1, ops2, Mkr] = kronred_analyze(M,Nnvc,cutDegree,Manalyze,oldindex,split,ops1,ops2,updateEntireMatrix)
+function [Msymbolic, Nnvckr, index, ops1, ops2, Mkr] = kronred_symbolic_matlab(M,Nnvc,cutDegree,Msymbolic,oldindex,split,ops1,ops2,updateEntireMatrix)
 
 Mkr = M;
 Nnvckr = Nnvc;
@@ -69,16 +69,16 @@ for i=1:Nnvc
                 nr2 = nr2 + 1;
             end                                    
         end
-        while (mod(nr1,4) ~= 0)
-            lops1 = [lops1 [0 -1]'];            
-            nr1 = nr1 + 1;
-        end
-        while (mod(nr2,4) ~= 0)
-            lops2 = [lops2 [0 -1]'];            
-            nr2 = nr2 + 1;
-        end        
-        assert(mod(nr1,4) == 0); % simd parallelization
-        assert(mod(nr2,4) == 0); % simd parallelization
+%         while (mod(nr1,4) ~= 0)
+%             lops1 = [lops1 [0 -1]'];            
+%             nr1 = nr1 + 1;
+%         end
+%         while (mod(nr2,4) ~= 0)
+%             lops2 = [lops2 [0 -1]'];            
+%             nr2 = nr2 + 1;
+%         end        
+%         assert(mod(nr1,4) == 0); % simd parallelization
+%         assert(mod(nr2,4) == 0); % simd parallelization
         lops1(1,1) = -nr1;
         lops2(1,1) = -nr2;
         ops1 = [ops1 lops1]; % must be run
@@ -91,8 +91,8 @@ for i=1:Nnvc
     
 end
 
-if isempty(Manalyze)
-    Manalyze = M;
+if isempty(Msymbolic)
+    Msymbolic = M;
 end
 ops = [ops1 ops2];
 for i = 1:size(ops,2)
@@ -104,8 +104,8 @@ for i = 1:size(ops,2)
         node1 = op(1);
         node2 = op(2);
     end    
-    if (node2 > 0 && Manalyze(node1,node2) == 0)
-        Manalyze(node1,node2) = nan;
+    if (node2 > 0 && Msymbolic(node1,node2) == 0)
+        Msymbolic(node1,node2) = nan;
     end
 end
 

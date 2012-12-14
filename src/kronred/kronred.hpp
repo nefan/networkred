@@ -19,6 +19,8 @@
  *
  */
 
+#ifndef _KRONRED_H
+#define _KRONRED_H
 
 #include "networkred_common.h"
 
@@ -27,5 +29,16 @@
 
 #include <omp.h>
 
-#include "kronred_factor.h"
+// operations
+#include <vector>
+#include <array>
+typedef std::pair<int,int> Op;
+typedef std::vector<Op> Ops;
+#define NoOp Op(0,-1)
+#define NewOp(node1,node2) Op(node1,node2)
+#define StartNodeOp(node) Op(0,node)
 
+typedef std::array<int,4> EncodedOp;
+typedef std::vector<EncodedOp> EncodedOps;
+
+#endif // _KRONRED_H

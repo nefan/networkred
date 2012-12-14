@@ -25,29 +25,20 @@ function [S, timetotal, timelu, timekronred, timebacksolve] = schur_klu(M,N,Nnvc
 % M must be ordered non-voltage controlled first
 %
 
+global NITER;
+
 cutDegree = N+1;
 
 nvc = 1:Nnvc;
 vc = (Nnvc+1):N;
-Mnvc = M(nvc,nvc);
-Mvc = M(vc,vc);
 
-Pnvc = amd(Mnvc);
-Pvc = 1:Nvc;
-Phj = [Pnvc (Nnvc+Pvc)];
-M = M(Phj,Phj);
-
-index = 1:N; ops1 = []; ops2 = [];
-[Manalyze,Nnvckranalyze,index,ops1,ops2,Mkranalyze] = kronred_analyze(M,Nnvc,cutDegree,[],index,false,ops1,ops2,true);
-filter = zeros(1,N); filter(index) = 1:(Nnvckranalyze+Nvc);
-% Mkrslow = kronred_slow(Manalyze,ops1,index,filter,true);
-[Mkrfast timekronred] = kronred(Manalyze,ops1,index,filter);
-% assert(norm(Mkrfast-Mkrslow,1) < 1e-10);
+[Msymbolic, Nkr, index, ops1, ops2] = kronred_symbolic(M,int64(Nnvc),int64(cutDegree),int64(3),false,true);
+[Mkr timekronred] = kronred(Msymbolic,ops1,index,NITER);
 
 % KLU part
-M = Mkrfast;
+M = Mkr;
 N = size(M,2);
-Nnvc = Nnvckranalyze;
+Nnvc = Nkr-Nvc;
 
 assert(Nnvc == 0);
 S = M;

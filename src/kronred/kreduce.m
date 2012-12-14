@@ -18,6 +18,7 @@
 % along with networkred.  If not, see <http://www.gnu.org/licenses/>.
 % 
 
+% kron reduction without symbolic step. For testing
 function [Mkr,Nnvckr] = kreduce(M,Nnvc,cutDegree)
 
 Mkr = M;

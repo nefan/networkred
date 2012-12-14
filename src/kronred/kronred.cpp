@@ -23,45 +23,68 @@
 #include "kronred_common.hpp"
 #include "kronred.cljmex.hpp"
 
+#include "kronred_factor.hpp"
+#include <vector>
+#include <cstring>
+
 cljmex_start()
 
     const int n = M.rows;
-    const int Nops = ops.cols;
-    const int Nkr = index.cols;
+    const int Nops = ops_in.cols;
+    const int Nkr = index_in.cols;
 
-     // Analyze
+    // Input
+    EncodedOps ops;
+    ops.reserve(Nops);
+    {
+        double* p = ops_in.x;
+        for (int i=0; i<Nops; i++) {
+            EncodedOp eop;
+            eop[0] = *p++; eop[1] = *p++;
+            eop[2] = *p++; eop[3] = *p++;
+
+            ops.push_back(eop);
+        }
+    }
  
-     double *Mmx = (double*)mxMalloc(M.nz * sizeof (double) + 1); // + 1 for 'trash' location
-     double *Mmz = (double*)mxMalloc(M.nz * sizeof (double) + 1);
-     int *ops2 = (int *)mxMalloc(Nops * sizeof (int) * 4);
  
-     double t0symbolic = omp_get_wtime();
-     kronred_analyze (M.p, M.i, M.x, M.z, M.nz, Mmx, Mmz, ops.x, Nops, ops2) ;
-     double t1symbolic = omp_get_wtime();
-     // mexPrintf("kronred: symbolic analysis took %f ms.\n",(t1symbolic-t0symbolic)/1e-3);
- 
-     // Factorize
-     
-     double time = -1;
-     // more precise timing
-     if (NITER > 1) {
-         double t0factor = omp_get_wtime();
+    double *Mx = new double[M.nz+1]; // temp arrays
+    double *Mz = new double[M.nz+1]; // +1 for 'trash' location
 
-         for (int i=0; i<NITER; i++)
-             kronred_factor(Mmx, Mmz, ops2, Nops) ;
+    // Timing
+    double time = -1;
+    if (NITER > 1) {
+        std::memcpy(Mx,M.x,M.nz*sizeof(double));
+        std::memcpy(Mz,M.z,M.nz*sizeof(double));
 
-         double t1factor = omp_get_wtime();
-         time = (t1factor-t0factor)/NITER;
-         // mexPrintf("kronred: factorization took %f ms.\n",time/1e-3);
-     }
+        double t0factor = omp_get_wtime();
 
-     kronred_analyze (M.p, M.i, M.x, M.z, M.nz, Mmx, Mmz, ops.x, Nops, ops2) ;
-     kronred_factor(Mmx, Mmz, ops2, Nops) ;
+        for (int i=0; i<NITER; i++)
+            kronred_factor(Mx, Mz, ops[0].data(), Nops) ;
+
+        double t1factor = omp_get_wtime();
+        time = (t1factor-t0factor)/NITER;
+        // mexPrintf("kronred: factorization took %f ms.\n",time/1e-3);
+
+    }
+
+    // Factorize
+    std::memcpy(Mx,M.x,M.nz*sizeof(double));
+    std::memcpy(Mz,M.z,M.nz*sizeof(double));
+    kronred_factor(Mx, Mz, ops[0].data(), Nops) ;
  
     // Output
  
-     /* Mkr */
-     kronred_extract(Mmx,Mmz,M.p,M.i,Nkr,index.x,filter.x,Mkr.p,Mkr.i,Mkr.x,Mkr.z);
+    // Mkr
+    std::vector<int> index;
+    index.reserve(index_in.cols);
+    for (int i=0; i<index_in.cols; i++)
+        index[i] = (int)index_in.x[i]-1; // -1 for matlab indexing
+    kronred_extract(M,Mx,Mz,index,Mkr);
  
+     // Cleanup
+     delete Mx;
+     delete Mz;
+
 cljmex_end()
 

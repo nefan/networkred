@@ -20,17 +20,15 @@
 
 include ../../networkred_config.mk
 
-SOURCES=kronred.cpp
-CLJMEX=kronred.mexa64
-HEADERS=kronred.hpp
+SOURCES=kronred.cpp kronred_symbolic.cpp
+CLJMEX=kronred.mexa64 kronred_symbolic.mexa64
+HEADERS=kronred.hpp kronred_common.hpp
 OBJECTS=$(SOURCES:.cpp=.mexa64) kronred_common.o kronred_factor.o
-
-ifdef USE_AVX_SIMD
-	CFLAGS+=-DUSE_AVX_SIMD
-endif
 
 # libraries
 CLIBS+=$(CXXLIBS)
+
+CXXFLAGS+=$(CFLAGS)
 
 INCLUDEPATH+=$(KLUINTERNAL) /usr/local/MATLAB/R2012a/extern/include/ ..
 INC=$(foreach d, $(INCLUDEPATH), -I'$d')
@@ -46,7 +44,11 @@ all: $(OBJECTS)
 	$(CC) -c $(CFLAGS) $(INC) $*.cpp -o $@
 %.s: %.c
 	$(CC) -S $(CFLAGS) -fverbose-asm $(INC) $*.c -o $@
+%.s: %.cpp
+	$(CC) -S $(CFLAGS) -fverbose-asm $(INC) $*.cpp -o $@
 
+# header dependencies
+kronred_symbolic.o: kronred_symbolic.hpp
 
 %.cljmex.hpp: %.cljmex
 	clojure -cp $(CLJMEXSRC) $*.cljmex > $@
@@ -55,7 +57,7 @@ $(CLJMEX): %.mexa64: %.cpp %.cljmex.hpp
 $(OBJECTS): $(HEADERS) Makefile
 
 %.mexa64: %.cpp kronred_factor.o kronred_common.o
-	$(MEX) $(MEXFLAGS) CFLAGS='$$CFLAGS $(CFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' CXXLIBS='$$CXXLIBS $(CXXLIBS)' $(INC) $(@:.mexa64=.cpp) kronred_factor.o kronred_common.o
+	$(MEX) $(MEXFLAGS) CFLAGS='$$CFLAGS $(CFLAGS)' CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' CXXLIBS='$$CXXLIBS $(CXXLIBS)' $(INC) $(@:.mexa64=.cpp) kronred_factor.o kronred_common.o
 
 clean:
 	rm -f ${OBJECTS} *.cljmex.hpp *.s

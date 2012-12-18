@@ -27,5 +27,5 @@ extern int linear_index( int row, int col, long *Mp, long *Mi);
 
 int kronred_extract(const cljmexComplex_sparse_matrix& M, 
         double *Mx, double *Mz,
-        std::vector<int>& index,
-        const cljmexComplex_sparse_matrix& Mkr);
+        const std::vector<int>& index,
+        cljmexComplex_sparse_matrix& Mkr);

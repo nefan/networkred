@@ -38,11 +38,9 @@ Likewise with cljmex (for generating the MATLAB mex files):
 
 Download and install KLU from http://www.suitesparse.com
 
-...
-
 Edit networkred_config.mk to have the correct paths, compiler flags, etc.
 Then compile 
 
     make
 
-and add lib/ to MATLAB's seach path or link with object files lib/*.o
+and add lib/ to MATLAB's seach path or link with libnetworkred.a in the lib/ directory.

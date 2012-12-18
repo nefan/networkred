@@ -37,7 +37,7 @@ information.
 
 ## Usage
 
-...
+The library can either be called directly from c/cpp or from MATLAB. Please see examples in src/examples
 
 
 ## License
@@ -47,12 +47,7 @@ Everything here is GPL.
 
 ## Installation
 
-Confer the INSTALL file.
-
-
-## Documentation
-
-...
+See the INSTALL file.
 
 
 ## News

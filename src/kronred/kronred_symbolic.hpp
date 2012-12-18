@@ -24,6 +24,13 @@
 
 #include "kronred_common.hpp"
 #include "kronred.hpp"
-#include "kronred_symbolic.cljmex.hpp"
+
+// kronred symbolic analysis
+void kronred_symbolic(const cljmexComplex_sparse_matrix& M, 
+        const int Nnvc, const int cutDegree, const int Nsweeps, 
+        const bool split, const bool updateEntireMatrix,
+        cljmexComplex_sparse_matrix& Msymbolic,
+        int& Nkr, std::vector<int>& index,
+        EncodedOps& eOps1, EncodedOps& eOps2);
 
 #endif // _KRONRED_SYMBOLIC_H

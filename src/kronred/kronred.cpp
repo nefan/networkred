@@ -23,9 +23,21 @@
 #include "kronred_common.hpp"
 #include "kronred.cljmex.hpp"
 
+
+#define COMPLEX
+#include "klu_internal.h"
+
 #include "kronred_factor.hpp"
 #include <vector>
 #include <cstring>
+#include <omp.h>
+
+void kronred(double *Mx, double *Mz, EncodedOps& ops) {
+    kronred_factor(Mx, Mz, ops[0].data(), ops.size()) ;
+}
+
+
+#ifdef MEX
 
 cljmex_start()
 
@@ -71,7 +83,7 @@ cljmex_start()
     // Factorize
     std::memcpy(Mx,M.x,M.nz*sizeof(double));
     std::memcpy(Mz,M.z,M.nz*sizeof(double));
-    kronred_factor(Mx, Mz, ops[0].data(), Nops) ;
+    kronred(Mx, Mz, ops) ;
  
     // Output
  
@@ -79,7 +91,7 @@ cljmex_start()
     std::vector<int> index;
     index.reserve(index_in.cols);
     for (int i=0; i<index_in.cols; i++)
-        index[i] = (int)index_in.x[i]-1; // -1 for matlab indexing
+        index.push_back((int)index_in.x[i]-1); // -1 for matlab indexing
     kronred_extract(M,Mx,Mz,index,Mkr);
  
      // Cleanup
@@ -88,3 +100,4 @@ cljmex_start()
 
 cljmex_end()
 
+#endif // MEX

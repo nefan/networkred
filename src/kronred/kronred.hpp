@@ -24,11 +24,6 @@
 
 #include "networkred_common.h"
 
-#define COMPLEX
-#include "klu_internal.h"
-
-#include <omp.h>
-
 // operations
 #include <vector>
 #include <array>
@@ -40,5 +35,8 @@ typedef std::vector<Op> Ops;
 
 typedef std::array<int,4> EncodedOp;
 typedef std::vector<EncodedOp> EncodedOps;
+
+// kron reduction
+void kronred(double *Mx, double *Mz, EncodedOps& ops);
 
 #endif // _KRONRED_H

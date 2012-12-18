@@ -1,6 +1,8 @@
 # compiled
 *.o
 *.a
+bin/*
+src/examples/hello_networkred
 
 # cljmex
 *.cljmex.hpp

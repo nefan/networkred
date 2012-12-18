@@ -20,44 +20,36 @@
 
 include ../../networkred_config.mk
 
-SOURCES=kronred.cpp kronred_symbolic.cpp
-CLJMEX=kronred.mexa64 kronred_symbolic.mexa64
-HEADERS=kronred.hpp kronred_common.hpp
-OBJECTS=$(SOURCES:.cpp=.mexa64) kronred.o kronred_symbolic.o kronred_common.o kronred_factor.o
+SOURCES=hello_networkred.cpp
+HEADERS=../networkred_common.h
+OBJECTS=$(SOURCES:.cpp=.o)
 
 # libraries
+libdir := ../../lib
 CLIBS+=$(CXXLIBS)
 
+CFLAGS+=-DNOMEX
 CXXFLAGS+=$(CFLAGS)
 
-INCLUDEPATH+=$(KLUINTERNAL) /usr/local/MATLAB/R2012a/extern/include/ ..
+# INCLUDEPATH+=
+INCLUDEPATH+=..
 INC=$(foreach d, $(INCLUDEPATH), -I'$d')
 
 #-----------------------------------------------------------------------------
 # Make rules:
 #-----------------------------------------------------------------------------
-all: $(OBJECTS)
+all: $(OBJECTS) hello_networkred
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(INC) $*.c -o $@
 %.o: %.cpp
-	$(CC) -c $(CFLAGS) $(INC) $*.cpp -o $@
-%.s: %.c
-	$(CC) -S $(CFLAGS) -fverbose-asm $(INC) $*.c -o $@
-%.s: %.cpp
-	$(CC) -S $(CFLAGS) -fverbose-asm $(INC) $*.cpp -o $@
+	$(CC) -c $(CXXFLAGS) $(INC) $*.cpp -o $@
 
-# header dependencies
-kronred_symbolic.o: kronred_symbolic.hpp
-
-%.cljmex.hpp: %.cljmex
-	clojure -cp $(CLJMEXSRC) $*.cljmex > $@
-$(CLJMEX): %.mexa64: %.cpp %.cljmex.hpp
 
 $(OBJECTS): $(HEADERS) Makefile
 
-%.mexa64: %.cpp kronred_factor.o kronred_common.o
-	$(MEX) $(MEXFLAGS) CFLAGS='$$CFLAGS $(CFLAGS) -DMEX' CXXFLAGS='$$CXXFLAGS $(CXXFLAGS) -DMEX' LDFLAGS='$$LDFLAGS $(LDFLAGS)' CXXLIBS='$$CXXLIBS $(CXXLIBS)' $(INC) $(@:.mexa64=.cpp) kronred_factor.o kronred_common.o
+hello_networkred: hello_networkred.o $(libdir)/libnetworkred.a
+	$(CC) hello_networkred.o -L$(libdir) -lnetworkred -o hello_networkred
 
 clean:
-	rm -f ${OBJECTS} *.cljmex.hpp *.s
+	rm -f ${OBJECTS} hello_networkred

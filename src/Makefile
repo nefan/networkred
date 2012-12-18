@@ -22,24 +22,36 @@
 kronred := kronred
 thevenin := thevenin
 schur := schur
+examples := examples
 libdir := ../lib
+bindir := ../bin
+
+# library
+NETWORKRED_LIB = kronred/kronred.o kronred/kronred_common.o kronred/kronred_factor.o kronred/kronred_symbolic.o
 
 #-----------------------------------------------------------------------------
 # Make rules:
 #-----------------------------------------------------------------------------
-all: $(kronred) $(thevenin) $(schur) lib
+all: $(kronred) $(thevenin) $(schur) lib bin
 
-$(kronred) $(thevenin) $(schur): force_look
+$(kronred) $(thevenin) $(schur) $(examples): force_look
 	$(MAKE) --directory=$@
 
 lib: $(kronred) $(thevenin) $(schur)
-	find . -type f -iname \*.mexa64 -or -iname \*.o | xargs -I{} cp {} $(libdir)
+	find . -type f -iname \*.mexa64 | xargs -I{} cp {} $(libdir)
+	ar cr $(libdir)/libnetworkred.a $(NETWORKRED_LIB)
+	ranlib $(libdir)/libnetworkred.a
+
+
+bin: $(kronred) $(thevenin) $(schur) $(examples)
+	cp examples/hello_networkred $(bindir)
 
 clean:
 	$(MAKE) --directory=$(kronred) clean
 	$(MAKE) --directory=$(thevenin) clean
 	$(MAKE) --directory=$(schur) clean
-	rm $(libdir)/*.mexa64 $(libdir)/*.o
+	$(MAKE) --directory=$(examples) clean
+	rm $(libdir)/*.mexa64 $(libdir)/*.a $(bindir)/*
 
 force_look:
 	@true

@@ -19,6 +19,7 @@
  *
  */
 #include "kronred_symbolic.hpp"
+#include "kronred_symbolic.cljmex.hpp"
 //#undef NDEBUG
 //#define assert(X) mxAssert(X,"c assert")
 
@@ -139,7 +140,7 @@ void kronred_symbolic(const cljmexComplex_sparse_matrix& M,
             int r = M.i[ri]; // row
 
             Edge e = add_edge(c,r,g).first;
-            put(edge_weight, g, e, M.v[ri]);
+            put(edge_weight, g, e, cljmexComplex(M.x[ri],M.z[ri]));
             if (std::max(c,r) < Nnvc)
                 add_edge(c,r,gnvc);
         }
@@ -266,6 +267,8 @@ void kronred_symbolic(const cljmexComplex_sparse_matrix& M,
     kronred_encode(Msymbolic,ops2,eOps2);
 }
 
+#ifdef MEX
+
 cljmex_start()
 
     const int n = M.rows;
@@ -275,7 +278,6 @@ cljmex_start()
     int Nkr; 
     std::vector<int> index;
     EncodedOps eOps1, eOps2;
-    Ops ops1;
 
     // perform symbolic analysis
     kronred_symbolic(M, Nnvc, cutDegree, Nsweeps, 
@@ -333,3 +335,4 @@ cljmex_start()
  
 cljmex_end()
 
+#endif // MEX

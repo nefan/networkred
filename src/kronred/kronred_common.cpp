@@ -44,8 +44,12 @@ int linear_index
 // extract from M to Mkr
 int kronred_extract(const cljmexComplex_sparse_matrix& M, 
         double *Mx, double *Mz,
-        std::vector<int>& index,
-        const cljmexComplex_sparse_matrix& Mkr) {
+        const std::vector<int>& index,
+        cljmexComplex_sparse_matrix& Mkr) {
+
+    // dimensions
+    Mkr.rows = index.size();
+    Mkr.cols = index.size();
 
     // filter
     std::vector<int> filter(M.cols,-1);

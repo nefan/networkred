@@ -30,7 +30,7 @@ CLIBS+=$(CXXLIBS)
 
 CXXFLAGS+=$(CFLAGS)
 
-INCLUDEPATH+=$(KLUINTERNAL) /usr/local/MATLAB/R2012a/extern/include/ ..
+INCLUDEPATH+=$(KLUINTERNAL) ..
 INC=$(foreach d, $(INCLUDEPATH), -I'$d')
 
 #-----------------------------------------------------------------------------

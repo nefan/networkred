@@ -23,6 +23,7 @@
 #include "../kronred/kronred.hpp"
 #include "../kronred/kronred_symbolic.hpp"
 #include "cljmex.hpp"
+#undef printf // mex.h defines printf to be mexPrintf
 
 #include <cstring>
 #include <assert.h>

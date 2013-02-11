@@ -35,7 +35,7 @@ CLJMEXSRC=$(CLJMEXHOME)/src
 CLJMEXINCLUDE=$(CLJMEXHOME)/include
 
 # includes
-INCLUDEPATH=$(SPARSELIBDIR)/include $(CLJMEXINCLUDE) 
+INCLUDEPATH=$(SPARSELIBDIR)/include $(CLJMEXINCLUDE) /usr/local/MATLAB/R2012b/extern/include/
 INC=$(foreach d, $(INCLUDEPATH), -I'$d')
 
 # debugging

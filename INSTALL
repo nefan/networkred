@@ -1,4 +1,3 @@
-
 --------------------------------------------------------------------------------
 
     This file is part of networkred.
@@ -29,7 +28,7 @@ Get networkred
 
 Download the ssparse library
 
-    git clone https://github.com/nefan/sparse.git
+    git clone https://github.com/nefan/ssparse.git
 
 and follow the installation instructions in the package. 
 Likewise with cljmex (for generating the MATLAB mex files):
